@@ -39,15 +39,6 @@ const Homepage = () => {
     setLoading(false);
   };
 
-  //   const getCommentsCount = async (id) => {
-  //     const comments = await axios.get(
-  //       `https://hacker-news.firebaseio.com/v0/item/${id}.json`
-  //     );
-
-  //     console.log(comments);
-  //     // return comments.data.descendants;
-  //   };
-
   const onSearch = () => {
     setSearch(query);
   };
