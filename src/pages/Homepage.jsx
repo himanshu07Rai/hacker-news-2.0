@@ -5,7 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 let day = 7;
 
 let dateOffset = 24 * 60 * 60 * 1000; //1 days
-var myDate = new Date(2023, 0, 7);
+var myDate = new Date(2023, 0, 8);
 
 console.log(myDate);
 
@@ -65,10 +65,34 @@ const fetchData = async (setData, data, setError) => {
   }
 };
 
+// const selectTop10 = (setTop10, setTop20, setTop50) => {
+//   setTop20(false);
+//   setTop50(false);
+//   setTop10(true);
+// };
+
+// const selectTop20 = (setTop10, setTop20, setTop50) => {
+//   setTop50(false);
+//   setTop10(false);
+//   setTop20(true);
+// };
+
+// const selectTop50 = (setTop10, setTop20, setTop50) => {
+//   setTop10(false);
+//   setTop20(false);
+//   setTop50(true);
+// };
+
+// const selectData
+
 const Homepage = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [top10, setTop10] = useState(false);
+  const [top20, setTop20] = useState(false);
+  const [top50, setTop50] = useState(false);
+  const [limit, setLimit] = useState(100);
 
   useEffect(() => {
     setIsLoading(true);
@@ -76,7 +100,7 @@ const Homepage = () => {
     setIsLoading(false);
   }, []);
 
-  console.log(error);
+  //   console.log(error);
 
   console.log(data);
 
@@ -86,9 +110,13 @@ const Homepage = () => {
     <h1>{error.message}</h1>
   ) : (
     <>
+      <button onClick={() => setLimit(10)}>Top 10</button>
+      <button onClick={() => setLimit(20)}>Top 20</button>
+      <button onClick={() => setLimit(50)}>Top 50</button>
       <div>
+        <h1 style={{ fontSize: "30px" }}>{createURLDate()}</h1>
         <InfiniteScroll
-          dataLength={data.length}
+          dataLength={50}
           next={() => {
             fetchData(setData, data, setError);
           }}
@@ -100,10 +128,11 @@ const Homepage = () => {
             </p>
           }
         >
-          {data.map((d) => {
+          {data.map((d, index) => {
             return (
-              <div key={d.id}>
+              <div key={index}>
                 {/* {console.log(d.id)} */}
+                if{}
                 <a href={d.link}>{d.link_text}</a>
                 <p>{d.points}</p>
               </div>

@@ -17,10 +17,7 @@ export default function Search() {
       const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
       const res = await fetch(url);
       const data = await res.json();
-      // You can change the number of items you get back in your response using
-      // the `Array.length` method, as demonstrated below. Uncomment the line and
-      // reload your app to see it in action.
-      // data.hits.length = 10
+      data.hits.length = 5;
       setItems(data.hits);
       setLargeTitle(data.hits[0]);
     };
