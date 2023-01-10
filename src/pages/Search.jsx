@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Input,
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
+import { Input, Button, Card, CardBody, Spinner, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
-const fetchNews = async (query, setLargeTitle, setItems) => {
+const fetchNews = async (query, setItems) => {
   const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
   const res = await axios.get(url);
   let news = res.data.hits;
-  // news.length = 20;
   setItems(news);
 };
 
@@ -26,12 +15,11 @@ export default function Search() {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState("development");
   const [text, setText] = useState("");
-  const [largeTitle, setLargeTitle] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    fetchNews(query, setLargeTitle, setItems);
+    fetchNews(query, setItems);
     setIsLoading(false);
   }, [query]);
 
@@ -54,7 +42,6 @@ export default function Search() {
     <Spinner />
   ) : (
     <>
-      {/* Search form */}
       <div
         style={{
           position: "fixed",
@@ -66,7 +53,7 @@ export default function Search() {
       >
         <Link to="/">🏠</Link>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form style={{ marginTop: "15px" }} onSubmit={handleSubmit}>
         <Input
           width={{ base: "150px", md: "300px", lg: "500px" }}
           marginTop="10px"
@@ -90,7 +77,6 @@ export default function Search() {
           Search
         </Button>
       </form>
-      {/* End of search form */}
 
       {items.map((item) => {
         const { author, created_at, objectID, title, url } = item;

@@ -2,21 +2,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  Box,
   Button,
   ButtonGroup,
   Card,
   CardBody,
-  CardFooter,
-  Divider,
   Spinner,
   Text,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
-import createURLDate from "../utils/date";
 
-let dateOffset = 24 * 60 * 60 * 1000; //1 days
+import { createURLDate, dateOffset } from "../utils/date";
 var myDate = new Date(2023, 0, 7);
 
 const fetchData = async (setData, data, setError) => {

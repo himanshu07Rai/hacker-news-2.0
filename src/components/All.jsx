@@ -12,37 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
-import createURLDate from "../utils/date";
 
-let dateOffset = 24 * 60 * 60 * 1000; //1 days
+import { createURLDate, dateOffset } from "../utils/date";
 var myDate = new Date(2023, 0, 7);
-
-// const monthMap = [
-//   "01",
-//   "02",
-//   "03",
-//   "04",
-//   "05",
-//   "06",
-//   "07",
-//   "08",
-//   "09",
-//   "10",
-//   "11",
-//   "12",
-// ];
-// const dayMap = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"];
-
-// const createURLDate = () => {
-//   const day =
-//     myDate.getDate() < 10 ? dayMap[myDate.getDate()] : myDate.getDate();
-
-//   const month = monthMap[myDate.getMonth()];
-
-//   const year = myDate.getFullYear();
-
-//   return year + month + day;
-// };
 
 const fetchData = async (setData, data, setError, value) => {
   try {

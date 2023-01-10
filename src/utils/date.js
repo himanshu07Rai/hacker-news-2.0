@@ -1,3 +1,5 @@
+let dateOffset = 24 * 60 * 60 * 1000; //1 days
+
 const monthMap = [
   "01",
   "02",
@@ -25,4 +27,4 @@ const createURLDate = (myDate) => {
   return year + month + day;
 };
 
-export default createURLDate;
+export { createURLDate, dateOffset };
