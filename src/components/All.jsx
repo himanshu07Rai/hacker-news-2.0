@@ -13,6 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
+import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
 
 let dateOffset = 24 * 60 * 60 * 1000; //1 days
 var myDate = new Date(2023, 0, 7);
@@ -65,7 +66,7 @@ const fetchData = async (setData, data, setError, value) => {
       credentials: "same-origin",
     });
     const t = res.data;
-    console.log(myDate);
+    // console.log(myDate);
     await t.forEach((element) => {
       element.created_at = myDate;
     });
@@ -79,17 +80,6 @@ const fetchData = async (setData, data, setError, value) => {
     setError(error);
   }
 };
-
-const options = [
-  { label: "all", value: 100 },
-
-  { label: "top 10", value: 10 },
-
-  { label: "top 20", value: 20 },
-
-  { label: "top 50", value: 50 },
-];
-
 const All = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +96,7 @@ const All = () => {
   console.log(data);
 
   return isLoading ? (
-    <h1>Loading</h1>
+    <Spinner />
   ) : error ? (
     <h1>{error.message}</h1>
   ) : (
@@ -139,18 +129,20 @@ const All = () => {
                     </Text>
                     <Text padding={"10px"}>
                       Source:
-                      <a href={d.source}>{d.source}</a>
+                      <a href={d.source} target="_blank">
+                        {d.source}
+                      </a>
                     </Text>
                   </CardBody>
                   <Divider />
                   <CardFooter>
-                    <ButtonGroup spacing="2">
+                    <ButtonGroup spacing="2" display={"flex"}>
                       <Button
                         cursor={"default"}
                         variant="solid"
                         colorScheme="blue"
                       >
-                        <ChatIcon />
+                        <ChatIcon marginRight={"10px"} />
                         {d.comments}
                       </Button>
                       <Button
@@ -158,13 +150,19 @@ const All = () => {
                         variant="solid"
                         colorScheme="blue"
                       >
+                        <CheckIcon marginRight={"10px"} />
                         {d.points}
                       </Button>
                       <Button variant="ghost" colorScheme="blue">
                         {format(new Date(d.created_at), "dd MMM yyyy")}
                       </Button>
                     </ButtonGroup>
+                    <Divider />
                   </CardFooter>
+                  <Divider height={"10px"} color="red" />
+                  <Text padding={"0 0 10px 10px"} textAlign={"left"}>
+                    By : {d.submitter}
+                  </Text>
                 </Card>
               </div>
             );

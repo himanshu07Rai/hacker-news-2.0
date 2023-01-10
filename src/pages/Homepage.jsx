@@ -3,14 +3,15 @@ import Top10 from "../components/Top10";
 import Top20 from "../components/Top20";
 import Top50 from "../components/Top50";
 import All from "../components/All";
+import { Select } from "@chakra-ui/react";
 const options = [
-  { label: "all", value: 100 },
+  { label: "All", value: "all" },
 
-  { label: "top 10", value: 10 },
+  { label: "Top 10", value: 10 },
 
-  { label: "top 20", value: 20 },
+  { label: "Top 20", value: 20 },
 
-  { label: "top 50", value: 50 },
+  { label: "Top 50", value: 50 },
 ];
 
 const Homepage = () => {
@@ -19,16 +20,20 @@ const Homepage = () => {
   // console.log(data);
 
   return (
-    <>
-      <label>
-        <select value={value} onChange={(e) => setValue(e.target.value)}>
-          {options.map((option) => (
-            <option value={option.value}>{option.label}</option>
-          ))}
-        </select>
-      </label>
+    <div style={{ backgroundColor: "#eee" }}>
+      <Select
+        backgroundColor={"#fff"}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        margin={"30px auto"}
+        height="40px"
+        width={{ base: "150px", md: "300px", lg: "300px" }}
+      >
+        {options.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))}
+      </Select>
 
-      <p>We eat {value}!</p>
       {value == 10 ? (
         <Top10 />
       ) : value == 20 ? (
@@ -38,7 +43,7 @@ const Homepage = () => {
       ) : (
         <All />
       )}
-    </>
+    </div>
   );
 };
 
