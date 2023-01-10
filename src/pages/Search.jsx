@@ -96,7 +96,11 @@ export default function Search() {
         const { author, created_at, objectID, title, url } = item;
         return (
           <div key={objectID}>
-            <Card margin={"20px"} backgroundColor={"#dddef7"}>
+            <Card
+              margin={"20px"}
+              backgroundColor={"#dddef7"}
+              borderLeft="10px solid #f36a6a"
+            >
               <CardBody>
                 <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
                   <a href={url} target="_blank">

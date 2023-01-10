@@ -120,7 +120,7 @@ const Top10 = () => {
               <div key={index}>
                 <Card
                   margin={"20px"}
-                  backdropBlur="2xl"
+                  borderLeft="10px solid #f36a6a"
                   backgroundColor={"#dddef7"}
                 >
                   <CardBody>
