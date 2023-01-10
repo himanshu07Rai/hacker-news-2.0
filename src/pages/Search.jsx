@@ -48,6 +48,8 @@ export default function Search() {
     }
   };
 
+  console.log(isLoading);
+
   return isLoading ? (
     <Spinner />
   ) : (
@@ -60,12 +62,10 @@ export default function Search() {
           right: 0,
           zIndex: "20",
           margin: "20px",
-          alignContent: "end",
         }}
       >
         <Link to="/">🏠</Link>
       </div>
-
       <form onSubmit={handleSubmit}>
         <Input
           width={{ base: "150px", md: "300px", lg: "500px" }}
