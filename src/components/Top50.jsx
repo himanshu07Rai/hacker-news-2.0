@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-// import createURLDate from "../utils/date";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { format } from "date-fns";
+import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
 
 let dateOffset = 24 * 60 * 60 * 1000; //1 days
 var myDate = new Date(2023, 0, 7);
@@ -54,6 +66,13 @@ const fetchData = async (setData, data, setError, value) => {
       credentials: "same-origin",
     });
     const t = res.data;
+    // console.log(myDate);
+    await t.forEach((element) => {
+      element.created_at = myDate;
+    });
+
+    t.sort((a, b) => (a.points < b.points ? 1 : -1));
+    // const d = t.filter((d) => d);
     t.length = 50;
     setData([...data, ...t]);
     myDate.setTime(myDate.getTime() - dateOffset);
@@ -61,35 +80,35 @@ const fetchData = async (setData, data, setError, value) => {
     setError(error);
   }
 };
-
 const Top50 = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [value, setValue] = useState(100);
+
   useEffect(() => {
     setIsLoading(true);
-    fetchData(setData, data, setError);
+    fetchData(setData, data, setError, value);
     setIsLoading(false);
   }, []);
 
   console.log(data);
 
   return isLoading ? (
-    <h1>Loading</h1>
+    <Spinner />
   ) : error ? (
     <h1>{error.message}</h1>
   ) : (
     <>
       <div>
-        <h1 style={{ fontSize: "30px" }}>{createURLDate()}</h1>
         <InfiniteScroll
-          dataLength={10}
+          dataLength={data.length}
           next={() => {
-            fetchData(setData, data, setError);
+            fetchData(setData, data, setError, value);
           }}
           hasMore={true}
-          loader={<h4>Loading...</h4>}
+          loader={<Spinner />}
           endMessage={
             <p style={{ textAlign: "center" }}>
               <b>Yay! You have seen it all</b>
@@ -99,10 +118,52 @@ const Top50 = () => {
           {data.map((d, index) => {
             return (
               <div key={index}>
-                {/* {console.log(d.id)} */}
-
-                <a href={d.link}>{d.link_text}</a>
-                <p>{d.points}</p>
+                <Card
+                  margin={"20px"}
+                  backdropBlur="2xl"
+                  backgroundColor={"#dddef7"}
+                >
+                  <CardBody>
+                    <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
+                      <a href={d.link} target="_blank">
+                        {d.link_text}
+                      </a>
+                    </Text>
+                    <Text padding={"10px"}>
+                      Source:
+                      <span> {d.source}</span>
+                    </Text>
+                  </CardBody>
+                  <Divider />
+                  <CardFooter>
+                    <ButtonGroup spacing="2" display={"flex"}>
+                      <Button
+                        cursor={"default"}
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        <ChatIcon marginRight={"10px"} />
+                        {d.comments}
+                      </Button>
+                      <Button
+                        cursor={"default"}
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        <CheckIcon marginRight={"10px"} />
+                        {d.points}
+                      </Button>
+                      <Button variant="ghost" colorScheme="blue">
+                        {format(new Date(d.created_at), "dd MMM yyyy")}
+                      </Button>
+                    </ButtonGroup>
+                    <Divider />
+                  </CardFooter>
+                  <Divider height={"10px"} color="red" />
+                  <Text padding={"0 0 10px 10px"} textAlign={"left"}>
+                    By : {d.submitter}
+                  </Text>
+                </Card>
               </div>
             );
           })}

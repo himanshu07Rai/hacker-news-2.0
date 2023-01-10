@@ -1,26 +1,37 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Input,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
+
+const fetchNews = async (query, setLargeTitle, setItems) => {
+  const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
+  const res = await axios.get(url);
+  let news = res.data.hits;
+  // news.length = 20;
+  setItems(news);
+};
 
 export default function Search() {
   const [items, setItems] = useState([]);
-  const [query, setQuery] = useState("programming");
+  const [query, setQuery] = useState("development");
   const [text, setText] = useState("");
   const [largeTitle, setLargeTitle] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-
-    const fetchNews = async () => {
-      const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      data.hits.length = 5;
-      setItems(data.hits);
-      setLargeTitle(data.hits[0]);
-    };
-
-    fetchNews();
+    fetchNews(query, setLargeTitle, setItems);
     setIsLoading(false);
   }, [query]);
 
@@ -32,105 +43,79 @@ export default function Search() {
     } else {
       setQuery(text);
       setText("");
-      console.log(text);
-      console.log(query);
+      // console.log(text);
+      // console.log(query);
     }
   };
 
-  // console.log(items);
-
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <>
-      <main>
-        {isLoading ? (
-          <div className="spinner"></div>
-        ) : (
-          <>
-            {/* Search form */}
-            <form
-              onSubmit={handleSubmit}
-              className="flex place-items-center container mx-auto lg:max-w-4xl mt-10 px-5"
+      {/* Search form */}
+      <Link to="/">Home</Link>
+      <form
+        onSubmit={handleSubmit}
+        className="flex place-items-center container mx-auto lg:max-w-4xl mt-10 px-5"
+      >
+        <Input
+          width={{ base: "150px", md: "300px", lg: "500px" }}
+          marginTop="10px"
+          type="text"
+          name="text"
+          id="text"
+          placeholder="eg. development"
+          autoComplete="off"
+          required
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="w-full py-2 px-4 rounded bg-transparent border border-gray-700 focus:border-gray-600 transition-all duration-150 outline-none text-gray-700 placeholder-gray-700 text-xl lg:text-4xl lg:pb-4 mr-5"
+        />
+        <Button
+          marginLeft="10px"
+          variant="solid"
+          colorScheme="blue"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Search
+        </Button>
+      </form>
+      {/* End of search form */}
+
+      {items.map((item) => {
+        const { author, created_at, objectID, title, url } = item;
+        return (
+          <div key={objectID}>
+            <Card
+              margin={"20px"}
+              backdropBlur="2xl"
+              backgroundColor={"#dddef7"}
             >
-              <input
-                type="text"
-                name="text"
-                id="text"
-                placeholder="Search for something..."
-                autoComplete="off"
-                required
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full py-2 px-4 rounded bg-transparent border border-gray-700 focus:border-gray-600 transition-all duration-150 outline-none text-gray-700 placeholder-gray-700 text-xl lg:text-4xl lg:pb-4 mr-5"
-              />
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="bg-white border border-gray-700 text-xl lg:text-4xl py-2 px-6 rounded lg:pb-4 text-gray-700 hover:bg-transparent transition-all duration-150"
-              >
-                Search
-              </button>
-            </form>
-            {/* End of search form */}
+              <CardBody>
+                <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
+                  <a href={url} target="_blank">
+                    {title}
+                  </a>
+                </Text>
+              </CardBody>
 
-            <article className="my-10 flex flex-col items-center justify-center container lg:max-w-4xl mx-auto px-5">
-              <h1 className="font-bold text-center text-4xl my-5 text-white lg:text-6xl">
-                {largeTitle.title}
-              </h1>
-              <a
-                href={largeTitle.url}
-                target="_blank"
-                rel="noreferrer"
-                className="border-b border-gray-700 text-gray-600 text-lg hover:text-gray-400 hover:border-gray-400"
-              >
-                Read Full Story
-              </a>
-            </article>
-
-            <article className="container mx-auto lg:max-w-4xl px-5">
-              <p className="text-gray-600">
-                Category:{" "}
-                <span className="font-bold text-gray-400 capitalize">
-                  {query}
-                </span>
-              </p>
-            </article>
-
-            <section className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2 container mx-auto lg:max-w-4xl">
-              {items.map((item) => {
-                const { author, created_at, objectID, title, url } = item;
-
-                return (
-                  <article
-                    key={objectID}
-                    className="bg-gray-800 rounded p-3 transition-all duration-150"
-                  >
-                    <h3 className="font-bold text-white text-lg mb-3">
-                      {title}
-                    </h3>
-                    <article className="flex items-center justify-between">
-                      <p className="text-gray-600">
-                        By <em>{author}</em>
-                      </p>
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopenner noreferrer"
-                        className="border-b border-gray-700 text-gray-600 text-lg hover:text-gray-400 hover:border-gray-400"
-                      >
-                        Read More
-                      </a>
-                    </article>
-                    <p className="text-gray-400 mt-10">
-                      {/* Format date using the `format` method from `date-fns` */}
-                      {format(new Date(created_at), "dd MMM yyyy")}
-                    </p>
-                  </article>
-                );
-              })}
-            </section>
-          </>
-        )}
-      </main>
+              <CardFooter>
+                <ButtonGroup spacing="2" display={"flex"}>
+                  <Button variant="ghost" colorScheme="blue">
+                    {format(new Date(created_at), "dd MMM yyyy")}
+                  </Button>
+                </ButtonGroup>
+                <Divider />
+              </CardFooter>
+              <Divider height={"10px"} color="red" />
+              <Text padding={"0 0 10px 10px"} textAlign={"left"}>
+                By : {author}
+              </Text>
+            </Card>
+          </div>
+        );
+      })}
     </>
   );
 }

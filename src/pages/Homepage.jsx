@@ -4,6 +4,7 @@ import Top20 from "../components/Top20";
 import Top50 from "../components/Top50";
 import All from "../components/All";
 import { Select } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 const options = [
   { label: "All", value: "all" },
 
@@ -21,6 +22,7 @@ const Homepage = () => {
 
   return (
     <div style={{ backgroundColor: "#eee" }}>
+      <Link to="/search">Search</Link>
       <Select
         backgroundColor={"#fff"}
         value={value}

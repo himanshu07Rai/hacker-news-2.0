@@ -125,13 +125,13 @@ const All = () => {
                 >
                   <CardBody>
                     <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
-                      <a href={d.link}>{d.link_text}</a>
+                      <a href={d.link} target="_blank">
+                        {d.link_text}
+                      </a>
                     </Text>
                     <Text padding={"10px"}>
                       Source:
-                      <a href={d.source} target="_blank">
-                        {d.source}
-                      </a>
+                      <span> {d.source}</span>
                     </Text>
                   </CardBody>
                   <Divider />
