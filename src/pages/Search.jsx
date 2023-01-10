@@ -53,7 +53,19 @@ export default function Search() {
   ) : (
     <>
       {/* Search form */}
-      <Link to="/">Home</Link>
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          zIndex: "20",
+          margin: "20px",
+          alignContent: "end",
+        }}
+      >
+        <Link to="/">🏠</Link>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <Input
           width={{ base: "150px", md: "300px", lg: "500px" }}
