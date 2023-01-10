@@ -130,12 +130,9 @@ const Top50 = () => {
                       </a>
                     </Text>
                     <Text padding={"10px"}>
-                      Source:
-                      <span> {d.source}</span>
+                      Source :<span> {d.source}</span>
                     </Text>
-                  </CardBody>
-                  <Divider />
-                  <CardFooter>
+
                     <ButtonGroup spacing="2" display={"flex"}>
                       <Button
                         cursor={"default"}
@@ -157,12 +154,10 @@ const Top50 = () => {
                         {format(new Date(d.created_at), "dd MMM yyyy")}
                       </Button>
                     </ButtonGroup>
-                    <Divider />
-                  </CardFooter>
-                  <Divider height={"10px"} color="red" />
-                  <Text padding={"0 0 10px 10px"} textAlign={"left"}>
-                    By : {d.submitter}
-                  </Text>
+                    <Text padding={"0 0 10px 10px"} textAlign={"right"}>
+                      By : {d.submitter}
+                    </Text>
+                  </CardBody>
                 </Card>
               </div>
             );
