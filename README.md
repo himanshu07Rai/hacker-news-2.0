@@ -6,7 +6,9 @@ This app is built on top of [hckr.news API](https://hckrnews.com/)  and the [HN 
 
 Users can see the news date wise and can even search for any topic.
 
-NEWS can even be segregated as top 10, top 20 or top 50
+NEWS can even be segregated as top 10, top 20 or top 50.
+
+This app also supports infinite scrolling.
 
 
 
