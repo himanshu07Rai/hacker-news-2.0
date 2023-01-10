@@ -3,10 +3,8 @@ import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Spinner } from "@chakra-ui/react";
 
-import { createURLDate, dateOffset } from "../utils/date";
+import { createURLDate, dateOffset, myDate } from "../utils/date";
 import Card from "./Card";
-
-var myDate = new Date(2023, 0, 7);
 
 const fetchData = async (setData, data, setError) => {
   try {
