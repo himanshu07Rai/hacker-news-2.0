@@ -1,6 +1,48 @@
-# hacker-news-2.0
+<p align="center">
+   <h1 align="center">Hacker News 2.0 </h1>  
+</p>
 
-## Get all the important news in one go
+
+<h4 align="center">  Get all the important news in one go </h4>
+
+<p align="center">
+    <a href="https://github.com/himanshu07Rai/hacker-news-2.0/issues/new/choose">Report Bug</a>
+    ·
+    <a href="https://github.com/himanshu07Rai/hacker-news-2.0/issues/new/choose">Request Feature</a>
+</p>
+
+---
+
+## 🛠️ Installation Steps
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/himanshu07Rai/hacker-news-2.0.git
+```
+
+2. Change the working directory
+
+```bash
+cd .\hacker-news-2.0\
+```
+
+3. Install dependencies
+
+```bash
+npm install
+```
+
+5. Run the app
+
+```bash
+npm run dev
+```
+
+You are all set! Open [localhost:5173](http://localhost:5173/) to see the app.
+
+
+---
 
 This app is built on top of [hckr.news API](https://hckrnews.com/)  and the [HN angolia API](https://hn.algolia.com/api)
 
@@ -27,5 +69,8 @@ This app also supports infinite scrolling.
 
 ![image](https://user-images.githubusercontent.com/64080063/211578433-cfa16d20-1c32-429e-80c8-b3c7a449e2bf.png)
 
+---
 
-
+<h3 align="center">
+Thank You
+</h3>
