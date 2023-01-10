@@ -1,19 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
-import { format } from "date-fns";
-import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
+import { Spinner } from "@chakra-ui/react";
 
 import { createURLDate, dateOffset } from "../utils/date";
+import Card from "./Card";
 
 var myDate = new Date(2023, 0, 7);
 
@@ -49,8 +40,6 @@ const Top20 = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [value, setValue] = useState(100);
-
   useEffect(() => {
     setIsLoading(true);
     fetchData(setData, data, setError);
@@ -83,46 +72,14 @@ const Top20 = () => {
             return (
               <div key={index}>
                 <Card
-                  margin={"20px"}
-                  borderLeft="10px solid #f36a6a"
-                  backgroundColor={"#dddef7"}
-                >
-                  <CardBody>
-                    <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
-                      <a href={d.link} target="_blank">
-                        {d.link_text}
-                      </a>
-                    </Text>
-                    <Text padding={"10px"}>
-                      Source :<span> {d.source}</span>
-                    </Text>
-
-                    <ButtonGroup spacing="2" display={"flex"}>
-                      <Button
-                        cursor={"default"}
-                        variant="solid"
-                        colorScheme="blue"
-                      >
-                        <ChatIcon marginRight={"10px"} />
-                        {d.comments}
-                      </Button>
-                      <Button
-                        cursor={"default"}
-                        variant="solid"
-                        colorScheme="blue"
-                      >
-                        <CheckIcon marginRight={"10px"} />
-                        {d.points}
-                      </Button>
-                      <Button variant="ghost" colorScheme="blue">
-                        {format(new Date(d.created_at), "dd MMM yyyy")}
-                      </Button>
-                    </ButtonGroup>
-                    <Text padding={"0 0 10px 10px"} textAlign={"right"}>
-                      By : {d.submitter}
-                    </Text>
-                  </CardBody>
-                </Card>
+                  url={d.link}
+                  title={d.link_text}
+                  source={d.source}
+                  comments={d.comments}
+                  points={d.points}
+                  created_at={d.created_at}
+                  author={d.submitter}
+                />
               </div>
             );
           })}
