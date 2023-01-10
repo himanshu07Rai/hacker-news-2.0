@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// import format from "date-fns/format"
-// You can use the import above or the one below
 import { format } from "date-fns";
 
 export default function Search() {
@@ -8,7 +6,7 @@ export default function Search() {
   const [query, setQuery] = useState("programming");
   const [text, setText] = useState("");
   const [largeTitle, setLargeTitle] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
@@ -38,6 +36,8 @@ export default function Search() {
       console.log(query);
     }
   };
+
+  // console.log(items);
 
   return (
     <>

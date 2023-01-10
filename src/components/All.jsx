@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { format } from "date-fns";
 
 let dateOffset = 24 * 60 * 60 * 1000; //1 days
 var myDate = new Date(2023, 0, 7);
@@ -54,33 +65,20 @@ const fetchData = async (setData, data, setError, value) => {
       credentials: "same-origin",
     });
     const t = res.data;
-    t.length = 100;
+    console.log(myDate);
+    await t.forEach((element) => {
+      element.created_at = myDate;
+    });
+
+    t.sort((a, b) => (a.points < b.points ? 1 : -1));
+    // const d = t.filter((d) => d);
+    // d.length = 100;
     setData([...data, ...t]);
     myDate.setTime(myDate.getTime() - dateOffset);
   } catch (error) {
     setError(error);
   }
 };
-
-// const selectTop10 = (setTop10, setTop20, setTop50) => {
-//   setTop20(false);
-//   setTop50(false);
-//   setTop10(true);
-// };
-
-// const selectTop20 = (setTop10, setTop20, setTop50) => {
-//   setTop50(false);
-//   setTop10(false);
-//   setTop20(true);
-// };
-
-// const selectTop50 = (setTop10, setTop20, setTop50) => {
-//   setTop10(false);
-//   setTop20(false);
-//   setTop50(true);
-// };
-
-// const selectData
 
 const options = [
   { label: "all", value: 100 },
@@ -91,10 +89,6 @@ const options = [
 
   { label: "top 50", value: 50 },
 ];
-
-// const handleChange = (event, setValue) => {
-
-// };
 
 const All = () => {
   const [data, setData] = useState([]);
@@ -118,7 +112,6 @@ const All = () => {
   ) : (
     <>
       <div>
-        <h1 style={{ fontSize: "30px" }}>{createURLDate()}</h1>
         <InfiniteScroll
           dataLength={data.length}
           next={() => {
@@ -135,10 +128,44 @@ const All = () => {
           {data.map((d, index) => {
             return (
               <div key={index}>
-                {/* {console.log(d.id)} */}
-                if{}
-                <a href={d.link}>{d.link_text}</a>
-                <p>{d.points}</p>
+                <Card
+                  margin={"20px"}
+                  backdropBlur="2xl"
+                  backgroundColor={"#dddef7"}
+                >
+                  <CardBody>
+                    <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
+                      <a href={d.link}>{d.link_text}</a>
+                    </Text>
+                    <Text padding={"10px"}>
+                      Source:
+                      <a href={d.source}>{d.source}</a>
+                    </Text>
+                  </CardBody>
+                  <Divider />
+                  <CardFooter>
+                    <ButtonGroup spacing="2">
+                      <Button
+                        cursor={"default"}
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        <ChatIcon />
+                        {d.comments}
+                      </Button>
+                      <Button
+                        cursor={"default"}
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        {d.points}
+                      </Button>
+                      <Button variant="ghost" colorScheme="blue">
+                        {format(new Date(d.created_at), "dd MMM yyyy")}
+                      </Button>
+                    </ButtonGroup>
+                  </CardFooter>
+                </Card>
               </div>
             );
           })}
