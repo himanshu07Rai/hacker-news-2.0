@@ -54,13 +54,11 @@ export default function Search() {
     <>
       {/* Search form */}
       <Link to="/">Home</Link>
-      <form
-        onSubmit={handleSubmit}
-        className="flex place-items-center container mx-auto lg:max-w-4xl mt-10 px-5"
-      >
+      <form onSubmit={handleSubmit}>
         <Input
           width={{ base: "150px", md: "300px", lg: "500px" }}
           marginTop="10px"
+          backgroundColor={"#ffe"}
           type="text"
           name="text"
           id="text"
@@ -69,7 +67,6 @@ export default function Search() {
           required
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="w-full py-2 px-4 rounded bg-transparent border border-gray-700 focus:border-gray-600 transition-all duration-150 outline-none text-gray-700 placeholder-gray-700 text-xl lg:text-4xl lg:pb-4 mr-5"
         />
         <Button
           marginLeft="10px"
@@ -87,31 +84,19 @@ export default function Search() {
         const { author, created_at, objectID, title, url } = item;
         return (
           <div key={objectID}>
-            <Card
-              margin={"20px"}
-              backdropBlur="2xl"
-              backgroundColor={"#dddef7"}
-            >
+            <Card margin={"20px"} backgroundColor={"#dddef7"}>
               <CardBody>
                 <Text fontSize={{ base: "18px", md: "26px", lg: "30px" }}>
                   <a href={url} target="_blank">
                     {title}
                   </a>
                 </Text>
-              </CardBody>
+                <Text>{format(new Date(created_at), "dd MMM yyyy")}</Text>
 
-              <CardFooter>
-                <ButtonGroup spacing="2" display={"flex"}>
-                  <Button variant="ghost" colorScheme="blue">
-                    {format(new Date(created_at), "dd MMM yyyy")}
-                  </Button>
-                </ButtonGroup>
-                <Divider />
-              </CardFooter>
-              <Divider height={"10px"} color="red" />
-              <Text padding={"0 0 10px 10px"} textAlign={"left"}>
-                By : {author}
-              </Text>
+                <Text padding={"0 0 10px 10px"} textAlign={"right"}>
+                  By : {author}
+                </Text>
+              </CardBody>
             </Card>
           </div>
         );

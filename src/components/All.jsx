@@ -45,14 +45,6 @@ const createURLDate = () => {
   return year + month + day;
 };
 
-// console.log(myDate);
-
-// myDate.setTime(myDate.getTime() - dateOffset);
-
-// console.log(myDate);
-
-// console.log(myDate.getDate(), myDate.getMonth(), myDate.getFullYear());
-
 const fetchData = async (setData, data, setError, value) => {
   try {
     const res = await axios.get(`/api/data/${createURLDate()}.js`, {
@@ -66,14 +58,12 @@ const fetchData = async (setData, data, setError, value) => {
       credentials: "same-origin",
     });
     const t = res.data;
-    // console.log(myDate);
     await t.forEach((element) => {
       element.created_at = myDate;
     });
 
     t.sort((a, b) => (a.points < b.points ? 1 : -1));
-    // const d = t.filter((d) => d);
-    // d.length = 100;
+
     setData([...data, ...t]);
     myDate.setTime(myDate.getTime() - dateOffset);
   } catch (error) {
@@ -130,12 +120,9 @@ const All = () => {
                       </a>
                     </Text>
                     <Text padding={"10px"}>
-                      Source:
-                      <span> {d.source}</span>
+                      Source :<span> {d.source}</span>
                     </Text>
-                  </CardBody>
-                  <Divider />
-                  <CardFooter>
+
                     <ButtonGroup spacing="2" display={"flex"}>
                       <Button
                         cursor={"default"}
@@ -157,12 +144,10 @@ const All = () => {
                         {format(new Date(d.created_at), "dd MMM yyyy")}
                       </Button>
                     </ButtonGroup>
-                    <Divider />
-                  </CardFooter>
-                  <Divider height={"10px"} color="red" />
-                  <Text padding={"0 0 10px 10px"} textAlign={"left"}>
-                    By : {d.submitter}
-                  </Text>
+                    <Text padding={"0 0 10px 10px"} textAlign={"right"}>
+                      By : {d.submitter}
+                    </Text>
+                  </CardBody>
                 </Card>
               </div>
             );
