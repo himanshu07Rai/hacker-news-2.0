@@ -1,10 +1,23 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { all } from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Spinner } from "@chakra-ui/react";
+import { Select, Spinner } from "@chakra-ui/react";
 
 import { createURLDate, dateOffset, myDate } from "../utils/date";
 import Card from "./Card";
+import DateBanner from "./DateBanner";
+
+const filteredData = [];
+
+const options = [
+  { label: "All", value: "all" },
+
+  { label: "Top 10", value: 10 },
+
+  { label: "Top 20", value: 20 },
+
+  { label: "Top 50", value: 50 },
+];
 
 const fetchData = async (setData, data, setError) => {
   try {
@@ -19,24 +32,33 @@ const fetchData = async (setData, data, setError) => {
       credentials: "same-origin",
     });
     const t = res.data;
-    // console.log(myDate);
+
     await t.forEach((element) => {
       element.created_at = myDate;
     });
 
-    t.sort((a, b) => (a.points < b.points ? 1 : -1));
-    // const d = t.filter((d) => d);
-    // t.length = 50;
-    setData([...data, ...t]);
+    console.log(t);
+
+    const obj = {
+      [myDate.getTime()]: t,
+    };
+
+    console.log(obj);
+
+    setData([...data, { ...obj }]);
+
     myDate.setTime(myDate.getTime() - dateOffset);
   } catch (error) {
     setError(error);
   }
 };
+
+const initialState = [];
 const All = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(initialState);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [value, setValue] = useState(100);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,6 +75,19 @@ const All = () => {
   ) : (
     <>
       <div>
+        <Select
+          backgroundColor={"#fff"}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          margin={"30px auto"}
+          height="40px"
+          width={{ base: "150px", md: "300px", lg: "300px" }}
+        >
+          {options.map((option) => (
+            <option value={option.value}>{option.label}</option>
+          ))}
+        </Select>
+        {/* {"fsfs"} */}
         <InfiniteScroll
           dataLength={data.length}
           next={() => {
@@ -66,19 +101,39 @@ const All = () => {
             </p>
           }
         >
-          {data.map((d, index) => {
+          {data.map((el, index) => {
+            // const arr = el[Number(Object.keys(el)[0])];
+            let arr = el[Number(Object.keys(el)[0])];
+            arr.sort((a, b) => (a.points < b.points ? 1 : -1));
+            arr =
+              value == "all"
+                ? arr
+                : arr.slice(0, Number((arr.length * value) / 100));
+
+            // console.log(arr);
             return (
-              <div key={index}>
-                <Card
-                  url={d.link}
-                  title={d.link_text}
-                  source={d.source}
-                  comments={d.comments}
-                  points={d.points}
-                  created_at={d.created_at}
-                  author={d.submitter}
-                />
-              </div>
+              <>
+                <DateBanner date={Number(Object.keys(el)[0])} />
+
+                {arr.map((d, index) => {
+                  // console.log(d);
+                  return (
+                    <div key={index}>
+                      {/* <div>{"HI " + JSON.stringify(d)}</div> */}
+
+                      <Card
+                        url={d.link}
+                        title={d.link_text}
+                        source={d.source}
+                        comments={d.comments}
+                        points={d.points}
+                        created_at={d.created_at}
+                        author={d.submitter}
+                      />
+                    </div>
+                  );
+                })}
+              </>
             );
           })}
         </InfiniteScroll>

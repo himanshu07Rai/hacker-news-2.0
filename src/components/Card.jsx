@@ -7,7 +7,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { format } from "date-fns";
 import { ChatIcon, CheckIcon } from "@chakra-ui/icons";
 
 const Card = ({ url, title, source, comments, points, created_at, author }) => {
@@ -35,9 +34,6 @@ const Card = ({ url, title, source, comments, points, created_at, author }) => {
           <Button cursor={"default"} variant="solid" colorScheme="blue">
             <CheckIcon marginRight={"10px"} />
             {points}
-          </Button>
-          <Button variant="ghost" colorScheme="blue">
-            {format(new Date(created_at), "dd MMM yyyy")}
           </Button>
         </ButtonGroup>
         <Text padding={"0 0 10px 10px"} textAlign={"right"}>

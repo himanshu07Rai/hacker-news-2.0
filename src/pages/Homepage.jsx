@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import Top10 from "../components/Top10";
-import Top20 from "../components/Top20";
-import Top50 from "../components/Top50";
 import All from "../components/All";
 import { Select } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -37,7 +34,7 @@ const Homepage = () => {
           <SearchIcon />
         </Link>
       </div>
-      <Select
+      {/* <Select
         backgroundColor={"#fff"}
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -48,9 +45,10 @@ const Homepage = () => {
         {options.map((option) => (
           <option value={option.value}>{option.label}</option>
         ))}
-      </Select>
+      </Select> */}
+      <All />
 
-      {value == 10 ? (
+      {/* {value == 10 ? (
         <Top10 />
       ) : value == 20 ? (
         <Top20 />
@@ -58,7 +56,7 @@ const Homepage = () => {
         <Top50 />
       ) : (
         <All />
-      )}
+      )} */}
     </div>
   );
 };
