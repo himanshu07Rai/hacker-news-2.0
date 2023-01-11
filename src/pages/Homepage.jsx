@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import All from "../components/All";
-import { Select } from "@chakra-ui/react";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Select, Spinner } from "@chakra-ui/react";
+
+import { createURLDate, dateOffset, myDate } from "../utils/date";
+import Card from "../components/Card";
+import DateBanner from "../components/DateBanner";
+import { Search2Icon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { SearchIcon } from "@chakra-ui/icons";
+
 const options = [
   { label: "All", value: "all" },
 
@@ -13,51 +19,140 @@ const options = [
   { label: "Top 50", value: 50 },
 ];
 
+const fetchData = async (setData, data, setError) => {
+  try {
+    const res = await axios.get(`/api/data/${createURLDate(myDate)}.js`, {
+      method: "GET",
+      mode: "no-cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+      credentials: "same-origin",
+    });
+    const t = res.data;
+
+    await t.forEach((element) => {
+      element.created_at = myDate;
+    });
+
+    console.log(t);
+
+    const obj = {
+      [myDate.getTime()]: t,
+    };
+
+    console.log(obj);
+
+    setData([...data, { ...obj }]);
+
+    myDate.setTime(myDate.getTime() - dateOffset);
+  } catch (error) {
+    setError(error);
+  }
+};
+
+const initialState = [];
 const Homepage = () => {
+  const [data, setData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [value, setValue] = useState(100);
 
-  // console.log(data);
+  useEffect(() => {
+    setIsLoading(true);
+    fetchData(setData, data, setError);
+    setIsLoading(false);
+  }, []);
 
-  return (
-    <div style={{ backgroundColor: "#eee" }}>
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          zIndex: "20",
-          margin: "20px",
-          alignContent: "end",
-        }}
-      >
-        <Link to="/search">
-          <SearchIcon />
-        </Link>
+  console.log(data);
+
+  return isLoading ? (
+    <Spinner />
+  ) : error ? (
+    <h1>{error.message}</h1>
+  ) : (
+    <>
+      <div style={{ backgroundColor: "#eee" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            zIndex: "20",
+            margin: "20px",
+            alignContent: "end",
+          }}
+        >
+          <Link to="/search">
+            <Search2Icon />
+          </Link>
+        </div>
+        <Select
+          backgroundColor={"#fff"}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          margin={"30px auto"}
+          height="40px"
+          width={{ base: "150px", md: "300px", lg: "300px" }}
+        >
+          {options.map((option) => (
+            <option value={option.value}>{option.label}</option>
+          ))}
+        </Select>
+        {/* {"fsfs"} */}
+        <InfiniteScroll
+          dataLength={data.length}
+          next={() => {
+            fetchData(setData, data, setError);
+          }}
+          hasMore={true}
+          loader={<Spinner />}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          {data.map((el, index) => {
+            // const arr = el[Number(Object.keys(el)[0])];
+            let arr = el[Number(Object.keys(el)[0])];
+            arr.sort((a, b) => (a.points < b.points ? 1 : -1));
+            arr =
+              value == "all"
+                ? arr
+                : arr.slice(0, Number((arr.length * value) / 100));
+
+            // console.log(arr);
+            return (
+              <>
+                <DateBanner date={Number(Object.keys(el)[0])} />
+
+                {arr.map((d, index) => {
+                  // console.log(d);
+                  return (
+                    <div key={index}>
+                      {/* <div>{"HI " + JSON.stringify(d)}</div> */}
+
+                      <Card
+                        url={d.link}
+                        title={d.link_text}
+                        source={d.source}
+                        comments={d.comments}
+                        points={d.points}
+                        created_at={d.created_at}
+                        author={d.submitter}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            );
+          })}
+        </InfiniteScroll>
       </div>
-      {/* <Select
-        backgroundColor={"#fff"}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        margin={"30px auto"}
-        height="40px"
-        width={{ base: "150px", md: "300px", lg: "300px" }}
-      >
-        {options.map((option) => (
-          <option value={option.value}>{option.label}</option>
-        ))}
-      </Select> */}
-      <All />
-
-      {/* {value == 10 ? (
-        <Top10 />
-      ) : value == 20 ? (
-        <Top20 />
-      ) : value == 50 ? (
-        <Top50 />
-      ) : (
-        <All />
-      )} */}
-    </div>
+    </>
   );
 };
 
