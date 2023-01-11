@@ -6,7 +6,7 @@ import { Select, Spinner } from "@chakra-ui/react";
 
 import Card from "../components/Card";
 import DateBanner from "../components/DateBanner";
-import fetchData from "../utils/data";
+import { fetchData } from "../utils/data";
 
 const options = [
   { label: "All", value: "all" },
