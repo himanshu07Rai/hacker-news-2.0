@@ -36,4 +36,11 @@ const fetchData = async (setData, data, setError) => {
   }
 };
 
-export default fetchData;
+const fetchNews = async (query, setItems) => {
+  const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
+  const res = await axios.get(url);
+  let news = res.data.hits;
+  setItems(news);
+};
+
+export { fetchData, fetchNews };

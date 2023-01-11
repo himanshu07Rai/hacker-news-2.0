@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Input, Button, Card, CardBody, Spinner, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-
-const fetchNews = async (query, setItems) => {
-  const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
-  const res = await axios.get(url);
-  let news = res.data.hits;
-  setItems(news);
-};
+import { fetchNews } from "../utils/data";
 
 export default function Search() {
   const [items, setItems] = useState([]);
@@ -35,9 +28,6 @@ export default function Search() {
       // console.log(query);
     }
   };
-
-  console.log(isLoading);
-
   return isLoading ? (
     <Spinner />
   ) : (
