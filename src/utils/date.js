@@ -27,6 +27,6 @@ const createURLDate = (myDate) => {
   return year + month + day;
 };
 
-var myDate = new Date(2023, 0, 8);
+var myDate = new Date(2023, 0, 9);
 
 export { createURLDate, dateOffset, myDate };

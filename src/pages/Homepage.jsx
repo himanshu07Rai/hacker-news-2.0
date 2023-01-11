@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { Search2Icon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Select, Spinner } from "@chakra-ui/react";
 
-import { createURLDate, dateOffset, myDate } from "../utils/date";
 import Card from "../components/Card";
 import DateBanner from "../components/DateBanner";
-import { Search2Icon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
+import fetchData from "../utils/data";
 
 const options = [
   { label: "All", value: "all" },
@@ -18,40 +17,6 @@ const options = [
 
   { label: "Top 50", value: 50 },
 ];
-
-const fetchData = async (setData, data, setError) => {
-  try {
-    const res = await axios.get(`/api/data/${createURLDate(myDate)}.js`, {
-      method: "GET",
-      mode: "no-cors",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-      credentials: "same-origin",
-    });
-    const t = res.data;
-
-    await t.forEach((element) => {
-      element.created_at = myDate;
-    });
-
-    console.log(t);
-
-    const obj = {
-      [myDate.getTime()]: t,
-    };
-
-    console.log(obj);
-
-    setData([...data, { ...obj }]);
-
-    myDate.setTime(myDate.getTime() - dateOffset);
-  } catch (error) {
-    setError(error);
-  }
-};
 
 const initialState = [];
 const Homepage = () => {
@@ -101,7 +66,6 @@ const Homepage = () => {
             <option value={option.value}>{option.label}</option>
           ))}
         </Select>
-        {/* {"fsfs"} */}
         <InfiniteScroll
           dataLength={data.length}
           next={() => {
